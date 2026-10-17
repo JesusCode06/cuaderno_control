@@ -1,0 +1,599 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1020">
+
+    <meta
+        name="description"
+        content="CuadernoControl: panel personal para organizar proyectos, tareas y progreso de desarrollo."
+    >
+
+    <title>CuadernoControl | Panel de desarrollo</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- BARRA LATERAL -->
+        <aside class="sidebar" id="sidebar">
+            <a href="#dashboard" class="brand" aria-label="CuadernoControl, inicio">
+                <span class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="4" y="3" width="16" height="18" rx="3"
+                              stroke="currentColor" stroke-width="1.8"/>
+                        <path d="M8 8h8M8 12h8M8 16h5"
+                              stroke="currentColor" stroke-width="1.8"
+                              stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <span class="brand-text">
+                    <strong>Cuaderno<span>Control</span></strong>
+                    <small>WORKSPACE PERSONAL</small>
+                </span>
+            </a>
+
+            <div class="sidebar-section">
+                <p class="sidebar-label">ESPACIO DE TRABAJO</p>
+
+                <nav class="main-nav" aria-label="Navegación principal">
+                    <a href="#dashboard" class="nav-link active"
+                       data-view="dashboard">
+                        <span class="nav-icon" aria-hidden="true">▦</span>
+                        <span>Panel general</span>
+                    </a>
+
+                    <a href="#tasks" class="nav-link" data-view="tasks">
+                        <span class="nav-icon" aria-hidden="true">☷</span>
+                        <span>Todas las tareas</span>
+                        <span class="nav-count" id="sidebar-task-count">0</span>
+                    </a>
+
+                    <a href="#projects" class="nav-link" data-view="projects">
+                        <span class="nav-icon" aria-hidden="true">◇</span>
+                        <span>Proyectos</span>
+                    </a>
+
+                    <a href="#notes" class="nav-link" data-view="notes">
+                        <span class="nav-icon" aria-hidden="true">▤</span>
+                        <span>Bitácora</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-project">
+                <div class="sidebar-project-heading">
+                    <span class="project-indicator"></span>
+                    <span>PROYECTO ACTUAL</span>
+                </div>
+
+                <strong>Portafolio profesional</strong>
+                <p>Edward Jesús Rodriguez Castro</p>
+
+                <div class="mini-progress">
+                    <div class="mini-progress-track">
+                        <div
+                            class="mini-progress-fill"
+                            id="sidebar-progress-fill"
+                            style="width: 0%"
+                        ></div>
+                    </div>
+                    <span id="sidebar-progress-text">0%</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <span class="avatar">EJ</span>
+
+                <div class="user-info">
+                    <strong>Mi espacio</strong>
+                    <small>Desarrollo personal</small>
+                </div>
+
+                <span class="online-indicator"
+                      title="Aplicación local"></span>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content" id="main-content">
+
+            <!-- ENCABEZADO -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button
+                        class="icon-button menu-toggle"
+                        id="menu-toggle"
+                        type="button"
+                        aria-label="Abrir menú"
+                        aria-expanded="false"
+                        aria-controls="sidebar"
+                    >
+                        <span aria-hidden="true">☰</span>
+                    </button>
+
+                    <div class="breadcrumb">
+                        <span>CuadernoControl</span>
+                        <span class="breadcrumb-separator">/</span>
+                        <strong id="breadcrumb-current">Panel general</strong>
+                    </div>
+                </div>
+
+                <div class="topbar-actions">
+                    <span class="local-status">
+                        <span class="status-dot"></span>
+                        Guardado local
+                    </span>
+
+                    <button
+                        class="button button-primary"
+                        id="add-task-button"
+                        type="button"
+                    >
+                        <span aria-hidden="true">+</span>
+                        Nueva tarea
+                    </button>
+                </div>
+            </header>
+
+            <!-- VISTA: PANEL GENERAL -->
+            <section class="view active" id="view-dashboard"
+                     data-view-panel="dashboard">
+
+                <div class="page-heading">
+                    <div>
+                        <p class="eyebrow">CENTRO DE CONTROL</p>
+                        <h1>Mi espacio de trabajo<span class="title-dot">.</span></h1>
+                        <p class="page-description">
+                            Organiza tus ideas, controla tus tareas y avanza
+                            en tus proyectos paso a paso.
+                        </p>
+                    </div>
+
+                    <div class="date-display">
+                        <span class="date-icon" aria-hidden="true">◷</span>
+                        <span id="current-date">Fecha actual</span>
+                    </div>
+                </div>
+
+                <!-- ESTADÍSTICAS -->
+                <section class="stats-grid" aria-label="Resumen de tareas">
+
+                    <article class="stat-card stat-total">
+                        <div class="stat-top">
+                            <span class="stat-label">Total de tareas</span>
+                            <span class="stat-icon">▤</span>
+                        </div>
+                        <strong class="stat-value" id="total-tasks">0</strong>
+                        <p class="stat-caption">Tareas registradas</p>
+                    </article>
+
+                    <article class="stat-card stat-pending">
+                        <div class="stat-top">
+                            <span class="stat-label">Pendientes</span>
+                            <span class="stat-icon">◷</span>
+                        </div>
+                        <strong class="stat-value" id="pending-tasks">0</strong>
+                        <p class="stat-caption">Por comenzar</p>
+                    </article>
+
+                    <article class="stat-card stat-progress">
+                        <div class="stat-top">
+                            <span class="stat-label">En proceso</span>
+                            <span class="stat-icon">↗</span>
+                        </div>
+                        <strong class="stat-value" id="in-progress-tasks">0</strong>
+                        <p class="stat-caption">Trabajo en curso</p>
+                    </article>
+
+                    <article class="stat-card stat-completed">
+                        <div class="stat-top">
+                            <span class="stat-label">Culminadas</span>
+                            <span class="stat-icon">✓</span>
+                        </div>
+                        <strong class="stat-value" id="completed-tasks">0</strong>
+                        <p class="stat-caption">Trabajo completado</p>
+                    </article>
+
+                </section>
+
+                <!-- PROGRESO DEL PROYECTO -->
+                <section class="panel progress-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">SEGUIMIENTO</p>
+                            <h2>Progreso general</h2>
+                            <p class="panel-description">
+                                Tu avance basado en las tareas culminadas.
+                            </p>
+                        </div>
+
+                        <span class="progress-percentage"
+                              id="overall-progress-text">0%</span>
+                    </div>
+
+                    <div
+                        class="progress-track"
+                        id="overall-progress-track"
+                        role="progressbar"
+                        aria-label="Progreso general de las tareas"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow="0"
+                    >
+                        <div
+                            class="progress-fill"
+                            id="overall-progress-fill"
+                        ></div>
+                    </div>
+
+                    <div class="progress-footer">
+                        <span id="completed-summary">
+                            0 de 0 tareas culminadas
+                        </span>
+                        <span id="remaining-summary">
+                            Sin tareas pendientes
+                        </span>
+                    </div>
+                </section>
+
+                <!-- TAREAS RECIENTES -->
+                <section class="panel tasks-panel">
+                    <div class="panel-heading tasks-heading">
+                        <div>
+                            <p class="eyebrow">PLANIFICACIÓN</p>
+                            <h2>Tareas recientes</h2>
+                            <p class="panel-description">
+                                Revisa tus próximas actividades.
+                            </p>
+                        </div>
+
+                        <a href="#tasks" class="text-link" data-view="tasks">
+                            Ver todas <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+
+                    <div class="task-toolbar">
+                        <label class="search-box">
+                            <span aria-hidden="true">⌕</span>
+                            <input
+                                type="search"
+                                id="task-search"
+                                placeholder="Buscar una tarea..."
+                                aria-label="Buscar tareas por nombre"
+                            >
+                        </label>
+
+                        <label class="filter-box">
+                            <span class="sr-only">Filtrar por estado</span>
+                            <select id="task-filter">
+                                <option value="all">Todos los estados</option>
+                                <option value="pending">Pendiente</option>
+                                <option value="in-progress">En proceso</option>
+                                <option value="completed">Culminada</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="task-list" id="task-list">
+                        <!-- JavaScript insertará las tareas aquí. -->
+                    </div>
+
+                    <div class="empty-state" id="empty-state">
+                        <div class="empty-icon" aria-hidden="true">☷</div>
+                        <h3>Aún no hay tareas registradas</h3>
+                        <p>
+                            Añade tu primera tarea y comienza a organizar
+                            tu trabajo.
+                        </p>
+                        <button
+                            class="button button-secondary"
+                            id="empty-add-task"
+                            type="button"
+                        >
+                            + Crear primera tarea
+                        </button>
+                    </div>
+                </section>
+
+                <footer class="app-footer">
+                    <span>CuadernoControl <span id="app-version">v1.0.0</span></span>
+                    <span>Organiza. Ejecuta. Culmina.</span>
+                </footer>
+            </section>
+
+            <!-- VISTA: TODAS LAS TAREAS -->
+            <section class="view" id="view-tasks" data-view-panel="tasks">
+                <div class="page-heading">
+                    <div>
+                        <p class="eyebrow">GESTIÓN DE ACTIVIDADES</p>
+                        <h1>Todas las tareas<span class="title-dot">.</span></h1>
+                        <p class="page-description">
+                            Administra tus actividades y actualiza su estado.
+                        </p>
+                    </div>
+
+                    <button class="button button-primary"
+                            type="button" data-open-task>
+                        + Nueva tarea
+                    </button>
+                </div>
+
+                <div class="panel">
+                    <div class="task-toolbar">
+                        <label class="search-box">
+                            <span aria-hidden="true">⌕</span>
+                            <input
+                                type="search"
+                                id="all-task-search"
+                                placeholder="Buscar entre todas las tareas..."
+                                aria-label="Buscar entre todas las tareas"
+                            >
+                        </label>
+
+                        <label class="filter-box">
+                            <span class="sr-only">Filtrar tareas</span>
+                            <select id="all-task-filter">
+                                <option value="all">Todos los estados</option>
+                                <option value="pending">Pendiente</option>
+                                <option value="in-progress">En proceso</option>
+                                <option value="completed">Culminada</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div id="all-task-list" class="task-list"></div>
+
+                    <div class="empty-state" id="all-empty-state">
+                        <div class="empty-icon" aria-hidden="true">☷</div>
+                        <h3>No se encontraron tareas</h3>
+                        <p>Prueba otro filtro o registra una nueva actividad.</p>
+                        <button class="button button-secondary"
+                                type="button" data-open-task>
+                            + Nueva tarea
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISTA: PROYECTOS -->
+            <section class="view" id="view-projects" data-view-panel="projects">
+                <div class="page-heading">
+                    <div>
+                        <p class="eyebrow">ORGANIZACIÓN</p>
+                        <h1>Mis proyectos<span class="title-dot">.</span></h1>
+                        <p class="page-description">
+                            Visualiza el trabajo que estás desarrollando.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="panel project-card">
+                    <div class="project-card-top">
+                        <span class="project-card-icon">⌘</span>
+                        <span class="project-tag">ACTIVO</span>
+                    </div>
+
+                    <h2>Portafolio profesional</h2>
+                    <p>
+                        Sitio web personal para presentar mi perfil,
+                        habilidades y proyectos de Ingeniería de Sistemas.
+                    </p>
+
+                    <div class="project-meta">
+                        <span>HTML · CSS · JavaScript</span>
+                        <span id="project-completion">0% completado</span>
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-fill"
+                             id="project-progress-fill"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISTA: BITÁCORA -->
+            <section class="view" id="view-notes" data-view-panel="notes">
+                <div class="page-heading">
+                    <div>
+                        <p class="eyebrow">REGISTRO DE TRABAJO</p>
+                        <h1>Bitácora<span class="title-dot">.</span></h1>
+                        <p class="page-description">
+                            Documenta decisiones, avances, errores y soluciones.
+                        </p>
+                    </div>
+                </div>
+
+                <section class="panel notes-panel">
+                    <div class="notes-intro">
+                        <span class="notes-icon">▤</span>
+                        <div>
+                            <h2>Mi registro de desarrollo</h2>
+                            <p>
+                                Utiliza este espacio para guardar observaciones
+                                importantes sobre tu trabajo.
+                            </p>
+                        </div>
+                    </div>
+
+                    <form id="note-form">
+                        <label for="note-title">Título de la nota</label>
+                        <input
+                            id="note-title"
+                            name="title"
+                            type="text"
+                            maxlength="100"
+                            placeholder="Ej. Error al guardar una tarea"
+                            required
+                        >
+
+                        <label for="note-content">Descripción</label>
+                        <textarea
+                            id="note-content"
+                            name="content"
+                            rows="5"
+                            maxlength="5000"
+                            placeholder="Describe el avance, la decisión o el problema..."
+                            required
+                        ></textarea>
+
+                        <button class="button button-primary" type="submit">
+                            Guardar nota
+                        </button>
+                    </form>
+
+                    <div id="notes-list" class="notes-list"></div>
+
+                    <div id="notes-empty-state" class="empty-state">
+                        <div class="empty-icon" aria-hidden="true">▤</div>
+                        <h3>Tu bitácora está vacía</h3>
+                        <p>Las notas que guardes aparecerán en este espacio.</p>
+                    </div>
+                </section>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MODAL: CREAR O EDITAR TAREA -->
+    <div
+        class="modal-backdrop"
+        id="task-modal"
+        hidden
+    >
+        <section
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="task-modal-title"
+        >
+            <div class="modal-header">
+                <div>
+                    <p class="eyebrow">GESTIÓN DE TAREAS</p>
+                    <h2 id="task-modal-title">Nueva tarea</h2>
+                    <p class="panel-description">
+                        Define qué necesitas hacer y cómo lo organizarás.
+                    </p>
+                </div>
+
+                <button
+                    class="icon-button"
+                    id="close-task-modal"
+                    type="button"
+                    aria-label="Cerrar formulario"
+                >
+                    ×
+                </button>
+            </div>
+
+            <form id="task-form">
+                <input type="hidden" id="task-id" name="id">
+
+                <div class="form-group">
+                    <label for="task-title">Nombre de la tarea *</label>
+                    <input
+                        type="text"
+                        id="task-title"
+                        name="title"
+                        maxlength="120"
+                        placeholder="Ej. Diseñar la portada del portafolio"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="task-description">Descripción</label>
+                    <textarea
+                        id="task-description"
+                        name="description"
+                        rows="3"
+                        maxlength="2000"
+                        placeholder="¿Qué necesitas realizar para completar esta tarea?"
+                    ></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-status">Estado *</label>
+                        <select id="task-status" name="status" required>
+                            <option value="pending">Pendiente</option>
+                            <option value="in-progress">En proceso</option>
+                            <option value="completed">Culminada</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-priority">Prioridad *</label>
+                        <select id="task-priority" name="priority" required>
+                            <option value="low">Baja</option>
+                            <option value="medium" selected>Media</option>
+                            <option value="high">Alta</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-stage">Etapa</label>
+                        <select id="task-stage" name="stage">
+                            <option value="Preparación">Preparación</option>
+                            <option value="Diseño">Diseño</option>
+                            <option value="Desarrollo">Desarrollo</option>
+                            <option value="Pruebas">Pruebas</option>
+                            <option value="Publicación">Publicación</option>
+                            <option value="Mantenimiento">Mantenimiento</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-due-date">Fecha límite</label>
+                        <input
+                            type="date"
+                            id="task-due-date"
+                            name="dueDate"
+                        >
+                    </div>
+                </div>
+
+                <p class="form-hint">
+                    Los campos marcados con * son obligatorios.
+                </p>
+
+                <div class="modal-actions">
+                    <button
+                        class="button button-secondary"
+                        id="cancel-task"
+                        type="button"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        class="button button-primary"
+                        id="save-task-button"
+                        type="submit"
+                    >
+                        Guardar tarea
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- NOTIFICACIONES -->
+    <div
+        class="toast-container"
+        id="toast-container"
+        aria-live="polite"
+        aria-atomic="true"
+    ></div>
+
+</body>
+</html>
